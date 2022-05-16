@@ -1,0 +1,10 @@
+.root {
+    background-color: black;
+    font-family: "Inter", "Arial", sans-serif;
+    color: #ffffff;
+    margin: 0 auto;
+    padding: 0 19px;
+    max-width: 880px;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+  }
