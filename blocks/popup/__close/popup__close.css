@@ -13,7 +13,6 @@
   }
   .popup__close:hover {
     opacity: .6;
-    transform: rotate(65deg);
   }
   .popup__close:focus {
     outline: none;

@@ -8,85 +8,82 @@
     <link rel="stylesheet" href="./pages/index.css">
     <title lang="en">Mesto Russia</title>
 </head>
-<body class="root">
-<div class="page">
+
+<body class="page">
     <header class="header">
         <img src="./images/logo.svg" class="header__logo" alt="Логотип сайта">
     </header>
-<main class="content">
-    <section class="profile">
-        <img src="./images/image.jpg" class="profile__avatar" alt="Фото профиля">
-        <div class="profile__info">
-            <h1 class="profile__name">Жак-Ив Кусто</h1>
-            <button class="profile__button profile__button_type_edit" type="button" title="Редактировать профиль" aria-label="Редактировать профиль"></button>
-            <p class="profile__description">Исследователь океана</p>
-        </div>
-        <button class="profile__button profile__button_type_add" type="button" title="Добавить фотографию" aria-label="Добавить фотографию"></button>
-    </section>
-    <section class="elements">
-        <ul class="elements__content">
-            <li class="elements__item">
-                <img src="./images/image_1.jpg" class="elements__image" alt="Старинное здание посреди гор. Карачаевск.">
-                <div class="elements__card-container">
-                    <h2 class="elements__header">Карачаевск</h2>
-                    <button class="elements__like" type="button" title="Оценить фото" aria-label="Поставить лайк"></button>
-                </div>
-            </li>
-            <li class="elements__item">
-                <img src="./images/image_2.png" class="elements__image" alt="Луга и гора Эльбрус.">
-                <div class="elements__card-container">
-                    <h2 class="elements__header">Гора Эльбрус</h2>
-                    <button class="elements__like" type="button" title="Оценить фото" aria-label="Поставить лайк"></button>
-                </div>
-            </li>
-            <li class="elements__item">
-                <img src="./images/image_3.png" class="elements__image" alt="Горы Домбай">
-                <div class="elements__card-container">
-                    <h2 class="elements__header">Домбай</h2>
-                    <button class="elements__like" type="button" title="Оценить фото" aria-label="Поставить лайк"></button>
-                </div>
-            </li>
-            <li class="elements__item">
-                <img src="./images/image_4.jpg" class="elements__image" alt="Плывущий лебедь по озеру. Трентино - Италия.">
-                <div class="elements__card-container">
-                    <h2 class="elements__header">Трентино-Альто-Адидже</h2>
-                    <button class="elements__like" type="button" title="Оценить фото" aria-label="Поставить лайк"></button>
-                </div>
-            </li>
-            <li class="elements__item">
-                <img src="./images/image_5.jpg" class="elements__image" alt="Залив, окаймленный со стороны сущи цепочкой горных хребтов.">
-                <div class="elements__card-container">
-                    <h2 class="elements__header">Кампс-бей</h2>
-                    <button class="elements__like" type="button" title="Оценить фото" aria-label="Поставить лайк"></button>
-                </div>
-            </li>
-            <li class="elements__item">
-                <img src="./images/image_6.jpg" class="elements__image" alt="Разноцветные ступеньки, ведущие к пещерам Бату">
-                <div class="elements__card-container">
-                    <h2 class="elements__header">Пещеры Бату</h2>
-                    <button class="elements__like" type="button" title="Оценить фото" aria-label="Поставить лайк"></button>
-                </div>
-            </li>
+    <main class="content">
+        <section class="profile">
+            <img src="./images/image.jpg" class="profile__avatar" alt="Фото профиля">
+            <div class="profile__info">
+                <h1 class="profile__name">Жак-Ив Кусто</h1>
+                <button class="profile__button profile__button_type_edit" type="button" title="Редактировать профиль" aria-label="Редактировать профиль"></button>
+                <p class="profile__description">Исследователь океана</p>
+            </div>
+            <button class="profile__button profile__button_type_add" type="button" title="Добавить фотографию" aria-label="Добавить фотографию"></button>
+        </section>
+        <section class="elements">
+        <ul class="elements__list">
+            
         </ul>
-    </section>
-</main>
-<footer class="footer">
-    <p class="footer__copyright">&copy; Mesto Russia</p>
-</footer>
-<section class="popup">
-    <div class="popup__container">
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer__copyright">&copy; Mesto Russia</p>
+    </footer>
+
+    <div class="popup popup_type_edit">
+        <div class="popup__container">
+            <button class="popup__close" type="button" title="Закрыть окно" aria-label="Закрыть"></button>
+            <form action="post" class="popup__form">
+                <fieldset class="popup__groupping">
+                    <legend class="popup__header">Редактировать профиль</legend>
+                    <input type="text" class="popup__input" name="name" value="" placeholder="Имя пользователя">
+                    <input type="text" class="popup__input" name="description" value="" placeholder="Описание пользователя">
+                    <button class="popup__button" type="submit">Сохранить</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup popup_type_photo">
+        <div class="popup__container">
         <button class="popup__close" type="button" title="Закрыть окно" aria-label="Закрыть"></button>
-        <form action="post" class="popup__form" name="information">
+        <form action="post" class="popup__form">
             <fieldset class="popup__groupping">
-                <legend class="popup__header">Редактировать профиль</legend>
-                <input type="text" class="popup__input" name="name" value="" placeholder="Имя пользователя">
-                <input type="text" class="popup__input" name="description" value="" placeholder="Описание пользователя">
-                <button class="popup__button" type="submit">Сохранить</button>
+                <legend class="popup__header">Новое место</legend>
+                <input type="text" class="popup__input popup__input_type_name" name="name" value="" placeholder="Название">
+                <input type="text" class="popup__input popup__input_type_src" name="description" value="" placeholder="Ссылка на картинку">
+                <button class="popup__button" type="submit">Создать</button>
             </fieldset>
         </form>
+        </div>
     </div>
-</section>
-<script src="scripts/index.js"></script>
-</div>
+
+    <section class="popup popup_type_zoom">
+        <div class="popup__gallery">
+            <button class="popup__close" type="button" title="Закрыть окно" aria-label="Закрыть"></button>
+            <figure class="popup__figure">
+                <img class="popup__image">
+                <figcaption class="popup__figcaption"></figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <template id="template-card">
+        <li class="elements__item">
+            <button type="button" class="elements__delete"></button>
+            <img class="elements__image">
+            <div class="elements__card-container">
+                <h2 class="elements__header"></h2>
+                <button class="elements__like" type="button" title="Оценить фотографию" aria-label="Поставить лайк"></button>
+            </div>
+        </li>
+    </template>
+
+    <script src="scripts/index.js"></script>
 </body>
+
 </html>
