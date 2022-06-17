@@ -34,7 +34,7 @@ const popupOpenEdit = document.querySelector('.profile__button_type_edit'); // �
 const profileName = document.querySelector('.profile__name'); // Находим блок с именем
 const profileDesc = document.querySelector('.profile__description'); // Находим блок с описанием
 const inputUserName = popupEdit.querySelector('.popup__input_type_username');
-const inputUserDescription = popupEdit.querySelector('.popup__input__type_description');
+const inputUserDescription = popupEdit.querySelector('.popup__input_type_description');
 const buttonCloseEdit = popupEdit.querySelector('.popup__close'); // Находим кнопку для закрытия popup
 //Окно добавления фотографии
 const popupAdd = document.querySelector('.popup_type_photo');
