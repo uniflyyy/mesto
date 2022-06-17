@@ -1,6 +1,7 @@
 @import url('../vendor/normalize.css');
 @import url('../vendor/fonts.css');
 @import url('../blocks/page/page.css');
+@import url("../blocks/page/_overflowed/page_overflowed.css");
 
 /*Header styles*/
 @import url('../blocks/header/header.css');
@@ -26,6 +27,7 @@
 @import url("../blocks/elements/__cards-container/elements__card-container.css");
 @import url("../blocks/elements/__header/elements__header.css");
 @import url("../blocks/elements/__like/elements__like.css");
+@import url("../blocks/elements/__like/_active/elements__like_active.css");
 
 /*Footer styles*/
 @import url("../blocks/footer/footer.css");
@@ -33,6 +35,7 @@
 
 /*Popup styles*/
 @import url("../blocks/popup/popup.css");
+@import url("../blocks/popup/_open/popup_open.css");
 @import url("../blocks/popup/_type/popup_type_zoom.css");
 @import url("../blocks/popup/__gallery/popup__gallery.css");
 @import url("../blocks/popup/__figure/popup__figure.css");
