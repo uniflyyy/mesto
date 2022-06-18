@@ -77,7 +77,7 @@ const closeByClick = (evt) => {
     }
 }
 // Напишем функцию загрузки данных
-const LoadData = () => {
+const loadData = () => {
   inputUserName.value = profileName.textContent;
   inputUserDescription.value = profileDesc.textContent;
 }
@@ -93,13 +93,15 @@ const handleFormSubmitAdd = (evt) => {
   evt.preventDefault();
   const cardName = popupInputCardName.value;
   const cardImage = popupInputCardSrc.value;
-  renderCard(cardName, cardImage);
+  addCard(elementsList, createCard(cardName, cardImage));
   closePopup(popupAdd);
 }
-const renderCard = (cardName, cardImage) => {
+function createCard(cardName, cardImage) {
   const cardElement = cardTemplate.cloneNode(true);
+
   const cardElementImage = cardElement.querySelector('.elements__image');
   const cardElementLike = cardElement.querySelector('.elements__item');
+
   cardElement.querySelector('.elements__header').textContent = cardName;
   cardElementImage.setAttribute('src', cardImage);
   cardElementImage.addEventListener('click', () => {
@@ -109,24 +111,31 @@ const renderCard = (cardName, cardImage) => {
     zoomingFigcaption.textContent = cardName;
     openPopup(popupZoom);
   });
+
   cardElementLike.addEventListener('click', (evt) => {
     evt.target.classList.toggle('elements__like_active');
-  })
-  cardElement.querySelector('.elements__delete').addEventListener('click', deleteCard);
-  elementsList.prepend(cardElement)
+  });
+
+  cardElement.querySelector('.elements__delete').addEventListener('click', evt => {
+    const card = evt.target.closest('.elements__item');
+    card.remove();
+  });
+
+  return cardElement;
 }
-const deleteCard = (evt) => {
-  const card = evt.target.closest('.elements__item');
-  card.remove();
+
+function addCard(elementsList, cardElement) {
+  elementsList.prepend(cardElement);
 }
+
 const renderAll = () => {
   initialCards.forEach((el) => {
-    renderCard(el.name, el.link)
+    addCard(elementsList, createCard(el.name, el.link))
   })
 }
+
 //Окно добавления фотографий
 popupOpenAdd.addEventListener('click', () => {
-  const buttonElement = formAddPhoto.querySelector('.popup__button');
   popupInputCardName.value = '';
   popupInputCardSrc.value = '';
   openPopup(popupAdd);
@@ -135,11 +144,10 @@ formEditProfile.addEventListener('submit', handleFormSubmitEdit);
 buttonCloseAdd.addEventListener('click', () => {
   closePopup(popupAdd)
 });
+
 //Окно редактирования личных данных
 popupOpenEdit.addEventListener('click', () => {
-  LoadData();
-  inputUserName.value = profileName.textContent;
-  inputUserDescription.value = profileDesc.textContent;
+  loadData();
   openPopup(popupEdit);
 });
 formAddPhoto.addEventListener('submit', handleFormSubmitAdd);
