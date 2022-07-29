@@ -65,15 +65,14 @@ const closePopup = (popup) => {
   popup.removeEventListener('mousedown', closeByClick);
 }
 const closeByEsc = (evt) => {
-  const openedPopup = document.querySelector('.popup_open');
-  if(evt.key === 'Escape') {
-      closePopup(openedPopup, evt);
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_open');
+    closePopup(openedPopup, evt);
     }
 }
 const closeByClick = (evt) => {
-  const openedPopup = document.querySelector('.popup_open');
-  if(evt.currentTarget === evt.target) {
-      closePopup(openedPopup, evt);
+  if (evt.currentTarget === evt.target) {
+  closePopup(openedPopup, evt);
     }
 }
 // Напишем функцию загрузки данных
@@ -136,10 +135,13 @@ const renderAll = () => {
 
 //Окно добавления фотографий
 popupOpenAdd.addEventListener('click', () => {
+  const buttonElement = formAddPhoto.querySelector('.popup__button');
   popupInputCardName.value = '';
   popupInputCardSrc.value = '';
+  buttonElement.setAttribute("disabled", true);
+  buttonElement.classList.add(validationSelectors.inactiveButtonClass);
   openPopup(popupAdd);
-});
+});  
 formEditProfile.addEventListener('submit', handleFormSubmitEdit);
 buttonCloseAdd.addEventListener('click', () => {
   closePopup(popupAdd)
