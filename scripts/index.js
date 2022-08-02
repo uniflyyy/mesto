@@ -72,7 +72,7 @@ const closeByEsc = (evt) => {
 }
 const closeByClick = (evt) => {
   if (evt.currentTarget === evt.target) {
-  closePopup(openedPopup, evt);
+    closePopup(evt.target, evt);
     }
 }
 // Напишем функцию загрузки данных
