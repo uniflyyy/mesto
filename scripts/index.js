@@ -1,3 +1,6 @@
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
+
 const initialCards = [
   {
     name: 'Карачаевск',
@@ -25,9 +28,19 @@ const initialCards = [
   }
 ];
 
-const page = document.querySelector('.page');
+const params =  {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_inactive',
+  inputErrorClass: '.popup__input_type_error',
+  errorClass: 'popup__input-error_active',
+  formEditProfile: '.popup_type_edit',
+  formAddPhoto: '.popup_type_photo'
+}
+
+export const page = document.querySelector('.page');
 const elementsList = document.querySelector('.elements__list'); // Находим блок списка карточек
-const cardTemplate = document.querySelector('#template-card').content;
 //Окно редактирования профиля
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupOpenEdit = document.querySelector('.profile__button_type_edit'); // Находим кнопку для открытия popup
@@ -44,16 +57,36 @@ const buttonCloseAdd = popupAdd.querySelector('.popup__close');
 const popupInputCardName = document.querySelector('.popup__input_type_name');
 const popupInputCardSrc = document.querySelector('.popup__input_type_src');
 //Окно просмотра фотографии
-const popupZoom = document.querySelector('.popup_type_zoom');
-const zoomingImage = popupZoom.querySelector('.popup__image');
-const zoomingFigcaption = popupZoom.querySelector('.popup__figcaption');
+export const popupZoom = document.querySelector('.popup_type_zoom');
+export const zoomingImage = popupZoom.querySelector('.popup__image');
+export const zoomingFigcaption = popupZoom.querySelector('.popup__figcaption');
 const buttonCloseZoom = popupZoom.querySelector('.popup__close');
 
 const formEditProfile = popupEdit.querySelector('.popup__form'); // Находим форму в DOM
 const formAddPhoto = popupAdd.querySelector('.popup__form');
 
+// Функция добавления карточки в конец списка
+const prepend = (element) => {
+  return elementsList.prepend(element);
+}
+
+// Перебераем массив где каждому item присваиваем name, link, cardSelector
+initialCards.forEach((item) => {
+  const card = new Card(item.name, item.link,'#template-card');
+  const cardItem = card.generateCard();
+  prepend(cardItem);
+})
+//Добавление данных новой карточки
+const handleFormSubmitAdd = (evt) => {
+  evt.preventDefault();
+  const card = new Card(popupInputCardName.value, popupInputCardSrc.value,'#template-card')
+  const cardItem = card.generateCard();
+  prepend(cardItem);
+  closePopup(popupAdd);
+}
+
 // Напишем функцию открытия
-const openPopup = (popup) => {
+export const openPopup = (popup) => {
   popup.classList.add('popup_open');
   document.addEventListener('keydown', closeByEsc);
   popup.addEventListener('mousedown', closeByClick);
@@ -87,61 +120,21 @@ const handleFormSubmitEdit = (evt) => {
   profileDesc.textContent = inputUserDescription.value;
   closePopup(popupEdit);
 }
-//Добавление данных новой карточки
-const handleFormSubmitAdd = (evt) => {
-  evt.preventDefault();
-  const cardName = popupInputCardName.value;
-  const cardImage = popupInputCardSrc.value;
-  addCard(elementsList, createCard(cardName, cardImage));
-  closePopup(popupAdd);
-}
-function createCard(cardName, cardImage) {
-  const cardElement = cardTemplate.cloneNode(true);
-
-  const cardElementImage = cardElement.querySelector('.elements__image');
-  const cardElementLike = cardElement.querySelector('.elements__item');
-
-  cardElement.querySelector('.elements__header').textContent = cardName;
-  cardElementImage.setAttribute('src', cardImage);
-  cardElementImage.addEventListener('click', () => {
-    page.classList.add('page_overflowed')
-    zoomingImage.setAttribute('src', cardImage);
-    zoomingImage.setAttribute('alt', cardName);
-    zoomingFigcaption.textContent = cardName;
-    openPopup(popupZoom);
-  });
-
-  cardElementLike.addEventListener('click', (evt) => {
-    evt.target.classList.toggle('elements__like_active');
-  });
-
-  cardElement.querySelector('.elements__delete').addEventListener('click', evt => {
-    const card = evt.target.closest('.elements__item');
-    card.remove();
-  });
-
-  return cardElement;
-}
-
-function addCard(elementsList, cardElement) {
-  elementsList.prepend(cardElement);
-}
-
-const renderAll = () => {
-  initialCards.forEach((el) => {
-    addCard(elementsList, createCard(el.name, el.link))
-  })
-}
 
 //Окно добавления фотографий
 popupOpenAdd.addEventListener('click', () => {
   const buttonElement = formAddPhoto.querySelector('.popup__button');
+  const inputErrors = popupAdd.querySelectorAll('.popup__input_type_error');
   popupInputCardName.value = '';
   popupInputCardSrc.value = '';
-  buttonElement.setAttribute("disabled", true);
-  buttonElement.classList.add(validationSelectors.inactiveButtonClass);
+  inputErrors.forEach((elementError) => {
+    elementError.textContent = '';
+    elementError.classList.remove('popup__input_type_error-active');
+  })
+  buttonElement.setAttribute('disabled', '');
   openPopup(popupAdd);
 });  
+
 formEditProfile.addEventListener('submit', handleFormSubmitEdit);
 buttonCloseAdd.addEventListener('click', () => {
   closePopup(popupAdd)
@@ -150,12 +143,18 @@ buttonCloseAdd.addEventListener('click', () => {
 //Окно редактирования личных данных
 popupOpenEdit.addEventListener('click', () => {
   loadData();
+  const inputErrors = popupEdit.querySelectorAll('.popup__input_type_error');
+  inputErrors.forEach((elementError) => {
+    elementError.textContent = '';
+    elementError.classList.remove('popup__input_type_error-active');
+  })
   openPopup(popupEdit);
 });
 formAddPhoto.addEventListener('submit', handleFormSubmitAdd);
 buttonCloseEdit.addEventListener('click', () => {
   closePopup(popupEdit);
 });
+
 //Зум фотографии
 buttonCloseZoom.addEventListener('click', () => {
   page.classList.remove('page_overflowed');
@@ -165,4 +164,7 @@ buttonCloseZoom.addEventListener('click', () => {
   zoomingFigcaption.textContent = '';
 });
 
-renderAll();
+const formEditProfileValidator = new FormValidator(params, params.formEditProfile);
+formEditProfileValidator.enableValidation();
+const formAddPhotoValidator = new FormValidator(params, params.formAddPhoto);
+formAddPhotoValidator.enableValidation();
