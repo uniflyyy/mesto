@@ -1,53 +1,56 @@
-import { openPopup, page, zoomingImage, zoomingFigcaption, popupZoom } from './index.js';
-
-export default class Card {
-  constructor(name, link, cardSelector) {
+export class Card {
+  constructor(name, link, cardSelector, openPopup, handleCardClick) {
     this._name = name;
     this._link = link;
     this._cardSelector = cardSelector;
+    this._openPopup = openPopup;
+    this._handleCardClick = handleCardClick;
   }
+
   _getTemplate() {
-    return document
+    const cardElement = document
       .querySelector(this._cardSelector)
-      .content
-      .querySelector('.elements__item')
+      .content.querySelector('.card')
       .cloneNode(true);
+
+    return cardElement;
   }
-  generateCard() {
-    this._element = this._getTemplate();
-    this._setEventListeners();
-    this._element.querySelector('.elements__header').textContent = this._name;
-    this._element.querySelector('.elements__image').src = this._link;
-    return this._element;
+
+  _handleDeleteCard(evt) {
+    evt.target.closest('.card').remove();
   }
+
+  _handleLikeCard(evt) {
+    evt.target.classList.toggle('card__like-button_active');
+  }
+
   _setEventListeners() {
-    // Удаление карточки (Находим селектор кнопки -> Вешаем событие -> Возвращаем метод _deleteCard)
-    this._element.querySelector('.elements__delete').addEventListener('click', ()=> {
-      return this._deleteCard();
-    })
-    // Лайк карточки (Находим селектор кнопки -> Вешаем событие > Возвращаем метод _likeCard)
-    this._element.querySelector('.elements__like').addEventListener('click', () => {
-      return this._likeCard();
-    })
-    this._element.querySelector('.elements__image').addEventListener('click', () => {
-      return this._previewCard();
-    })
+    this._cardLikeButton = this._card.querySelector('.card__like-button');
+    this._cardDeleteButton = this._card.querySelector('.card__delete-button');
+    this._cardImage = this._card.querySelector('.card__image');
+
+    this._cardLikeButton.addEventListener('click', (evt) => {
+      this._handleLikeCard(evt);
+    });
+
+    this._cardDeleteButton.addEventListener('click', (evt) => {
+      this._handleDeleteCard(evt);
+    });
+
+    this._cardImage.addEventListener('click', () => {
+      this._handleCardClick(this._name, this._link);
+    });
   }
-  // Метод удаления карточки (Возвращаем удаление разметки карточки)
-  _deleteCard() {
-    return this._element.remove();
+
+  generateCard() {
+    this._card = this._getTemplate();
+    this._setEventListeners();
+
+    this._cardDescription = this._card.querySelector('.card__text');
+    this._cardDescription.textContent = this._name;
+    this._cardImage.src = this._link;
+    this._cardImage.alt = this._name;
+
+    return this._card;
   }
-  // Метод удаления карточки (Запишем нужный селектор в _cardElementLike -> Добавим класс like)
-  _likeCard() {
-    const _cardElementLike = this._element.querySelector('.elements__like');
-    return _cardElementLike.classList.toggle('elements__like_active');
-  }
-  // Метод просмотра карточки
-  _previewCard() {
-    page.classList.add('page_overflowed');
-    zoomingImage.src = this._link;
-    zoomingImage.alt = this._name;
-    zoomingFigcaption.textContent = this._name;
-    openPopup(popupZoom);
-  }
-} 
+}
