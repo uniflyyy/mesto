@@ -1,6 +1,6 @@
 // Импорт классов
 import { Card } from './Card.js';
-import { FormValidation } from './FormValidation.js';
+import { FormValidator } from './FormValidator.js';
 
 // Переменные
 
@@ -73,7 +73,7 @@ const formValidators = {};
 const enableValidation = (config) => {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
   formList.forEach((formElement) => {
-    const validator = new FormValidation(config, formElement);
+    const validator = new FormValidator(config, formElement);
     const formName = formElement.getAttribute('name');
     formValidators[formName] = validator;
     validator.enableValidation();
