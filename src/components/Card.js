@@ -6,6 +6,8 @@ export default class Card {
     this._handleCardClick = handleCardClick;
   }
 
+  // Метод для получения копии темплейта
+
   _getTemplate() {
     const cardElement = document
       .querySelector(this._cardSelector)
@@ -14,10 +16,14 @@ export default class Card {
 
     return cardElement;
   }
+  
+  // Метод для удаления карточки
 
   _handleDeleteCard(evt) {
     evt.target.closest('.card').remove();
   }
+
+  // Метод для лайка карточки
 
   _handleLikeCard(evt) {
     evt.target.classList.toggle('card__like-button_active');

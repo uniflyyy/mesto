@@ -1,63 +1,32 @@
+// Импорт CSS-файла
+
+import './index.css';
+
 // Импорт классов
-import Card from './Card.js';
-import FormValidator from './FormValidator.js';
-import PopupWithForm from './PopupWithForm.js';
-import PopupWithImage from './PopupWithImage.js';
-import Section from './Section.js';
-import UserInfo from './UserInfo.js';
+import Card from '../components/Card.js';
+import FormValidator from '../components/FormValidator.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import Section from '../components/Section.js';
+import UserInfo from '../components/UserInfo.js';
 
-// Переменные
+// Импорт переменных
 
-const profileInfo = document.querySelector('.profile-info');
-const popupEditButton = profileInfo.querySelector('.profile-info__edit-button');
-const userNameSelector = '.profile-info__name';
-const userDescriptionSelector = '.profile-info__description';
-const popupProfileSelector = '.popup_profile-edit';
-const nameInput = document.querySelector('.popup__input_type_name');
-const jobInput = document.querySelector('.popup__input_type_description');
-const cardTemplateSelector = '#card-template';
-const cardsContainerSelector = '.cards';
-const cardAddButton = document.querySelector('.profile__add-button');
-const popupAddCardSelector = '.popup_add-card';
-const popupPictureSelector = '.popup_picture';
-
-// Объекты
-
-const validatorSelectors = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__submit-button',
-  inactiveButtonClass: 'popup__submit-button_inactive',
-  inputErrorClass: 'popup__input_error',
-  errorClass: 'popup__error_active',
-};
-
-const initialCards = [
-  {
-    name: 'Карачаевск',
-    link: './images/image_1.jpg'
-  },
-  {
-    name: 'Гора Эльбрус',
-    link: './images/image_2.png'
-  },
-  {
-    name: 'Домбай',
-    link: './images/image_3.png'
-  },
-  {
-    name: 'Трентино-Альто-Адидже',
-    link: './images/image_4.jpg'
-  },
-  {
-    name: 'Кампс-бей',
-    link: './images/image_5.jpg'
-  },
-  {
-    name: 'Пещеры Бату',
-    link: './images/image_6.jpg'
-  }
-];
+import {
+  popupEditButton,
+  nameInput,
+  jobInput,
+  cardAddButton,
+  userNameSelector,
+  userDescriptionSelector,
+  popupProfileSelector,
+  cardTemplateSelector,
+  cardsContainerSelector,
+  popupAddCardSelector,
+  popupPictureSelector,
+  validatorSelectors,
+  initialCards,
+} from '../utils/Constants.js';
 
 // Создание экземпляров валидаторов для форм
 
@@ -87,22 +56,29 @@ const createCard = (item) => {
   );
 };
 
+// Экземпляр popup с картинкой
+
 const popupPicture = new PopupWithImage(popupPictureSelector);
 popupPicture.setEventListeners();
 
-const cardArr = new Section(
+
+// Рендер карточек из массива
+
+const cardList = new Section(
   {
     items: initialCards,
     renderer: (item) => {
       const card = createCard(item);
       const cardElement = card.generateCard();
-      cardArr.addItem(cardElement);
+      cardList.addItem(cardElement);
     },
   },
   cardsContainerSelector
 );
 
-cardArr.renderItems();
+cardList.renderItems();
+
+// Экземпляр с данными пользователя
 
 const userInfo = new UserInfo({
   name: userNameSelector,
@@ -128,7 +104,7 @@ const popupCardAdd = new PopupWithForm(popupAddCardSelector, (items) => {
   console.log(card);
   const cardElement = card.generateCard();
   console.log(cardElement);
-  cardArr.addItem(cardElement);
+  cardList.addItem(cardElement);
   console.log(popupCardAdd);
 });
 

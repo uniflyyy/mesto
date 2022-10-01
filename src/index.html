@@ -5,32 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="Desctiption" content="Автор: Дмитрий Кононенко. Проектная работа: Место. Сайт создан в рамках учебы на платформе Яндекс.Практикум.">
     <meta name="author" content="Дмитрий Кононенко">
-    <link rel="stylesheet" href="./pages/index.css">
     <title lang="en">Mesto Russia</title>
   </head>
 
   <body class="body">
     <div class="page">
       <header class="header">
-        <img src="./images/logo.svg" alt="лого-место" class="logo" />
+        <img src="<%=require('./images/logo.svg')%>" alt="лого-место" class="logo" />
       </header>
 
       <main>
         <section class="profile">
           <div class="profile-info">
-            <img  src="./images/profile-avatar.jpg" alt="аватарка"  class="profile-info__image"/>
+            <img  src="<%=require('./images/profile-avatar.jpg')%>" alt="аватарка"  class="profile-info__image"/>
             <div class="profile-info__text-box">
               <div class="profile-info__name-box">
                 <h1 class="profile-info__name">Жак-Ив Кусто</h1>
                 <button type="button" class="profile-info__edit-button">
-                  <img  src="./images/edit-button-image.svg" alt="Редактировать" class="profile-info__edit-button-image"/>
+                  <img  src="<%=require('./images/edit-button-image.svg')%>" alt="Редактировать" class="profile-info__edit-button-image"/>
                 </button>
               </div>
               <p class="profile-info__description">Исследователь океана</p>
             </div>
           </div>
           <button type="button" class="profile__add-button">
-            <img  src="./images/add-button-image.svg" alt="Добавить"  class="profile__add-button-image"/>
+            <img  src="<%=require('./images/add-button-image.svg')%>" alt="Добавить"  class="profile__add-button-image"/>
           </button>
         </section>
 
@@ -101,11 +100,11 @@
       </div>
     </section>
 
-    <script type="module" src="./scripts/Card.js"></script>
-    <script type="module" src="./scripts/FormValidator.js"></script>
-    <script type="module" src="./scripts/UserInfo.js"></script>
-    <script type="module" src="./scripts/PopupWithForm.js"></script>
-    <script type="module" src="./scripts/PopupWithImage.js"></script>
-    <script type="module" src="./scripts/index.js"></script>
+    <script type="module" src="../src/components/Card.js"></script>
+    <script type="module" src="../src/components/FormValidation.js"></script>
+    <script type="module" src="../src/components/UserInfo.js"></script>
+    <script type="module" src="../src/components/PopupWithForm.js"></script>
+    <script type="module" src="../src/components/PopupWithImage.js"></script>
+    <script type="module" src="../src/pages/index.js"></script>
   </body>
 </html>
