@@ -10,4 +10,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    padding-top: 25px;
+    padding-bottom: 31px;
 }

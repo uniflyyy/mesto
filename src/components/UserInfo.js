@@ -2,6 +2,7 @@ export default class UserInfo {
     constructor(userSelectors) {
         this._userName = document.querySelector(userSelectors.name);
         this._userDescription = document.querySelector(userSelectors.description);
+        this._userAvatar = document.querySelector(userSelectors.avatar);
     }
 
     getUserInfo() {
@@ -13,8 +14,13 @@ export default class UserInfo {
         return this._userInfo;
     }
 
-    setUserInfo(jobInput, nameInput) {
-        this._userDescription.textContent = jobInput.value;
-        this._userName.textContent = nameInput.value;
+    setUserInfo(item) {
+        this._userDescription.textContent = item.about;
+        this._userName.textContent = item.name;
+        this.setUserAvatar(item);
+    }
+
+    setUserAvatar(item) {
+        this._userAvatar.src = item.avatar;
     }
 }

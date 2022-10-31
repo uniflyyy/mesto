@@ -18,6 +18,8 @@
 @import url(../blocks/profile/__add-button/profile__add-button.css);
 @import url(../blocks/profile/__add-button-image/profile__add-button-image.css);
 @import url(../blocks/profile-info/profile-info.css);
+@import url(../blocks/profile-info/__avatar/profile-info__avatar.css);
+@import url(../blocks/profile-info/__avatar-button/profile-info__avatar-button.css);
 @import url(../blocks/profile-info/__image/profile-info__image.css);
 @import url(../blocks/profile-info/__text-box/profile-info__text-box.css);
 @import url(../blocks/profile-info/__name-box/profile-info__name-box.css);
@@ -34,8 +36,10 @@
 @import url(../blocks/card/__image/card__image.css);
 @import url(../blocks/card/__description/card__description.css);
 @import url(../blocks/card/__text/card__text.css);
+@import url(../blocks/card/__like-container/card__like-container.css);
 @import url(../blocks/card/__like-button/card__like-button.css);
 @import url(../blocks/card/__like-button/_active/card__like-button_active.css);
+@import url(../blocks/card/__like-counter/card__like-counter.css);
 @import url(../blocks/card/__delete-button/card__delete-button.css);
 
 /* Footer */
@@ -49,6 +53,7 @@
 @import url(../blocks/popup/_opened/popup_opened.css);
 @import url(../blocks/popup/__container/popup__container.css);
 @import url(../blocks/popup/__heading/popup__heading.css);
+@import url(../blocks/popup/__heading/_position/popup__heading_position.css);
 @import url(../blocks/popup/__form/popup__form.css);
 @import url(../blocks/popup/__input-container/popup__input-container.css);
 @import url(../blocks/popup/__input/popup__input.css);
@@ -57,6 +62,7 @@
 @import url(../blocks/popup/__error/_active/popup__error_active.css);
 @import url(../blocks/popup/__submit-button/popup__submit-button.css);
 @import url(../blocks/popup/__submit-button/_inactive/popup__submit-button_inactive.css);
+@import url(../blocks/popup/__submit-button/_position/popup__submit-button_position.css);
 @import url(../blocks/popup/__close-button/popup__close-button.css);
 @import url(../blocks/popup/__image/popup__image.css);
 @import url(../blocks/popup/__picture-container/popup__picture-container.css);
