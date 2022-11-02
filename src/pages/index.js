@@ -66,9 +66,9 @@ const createCard = (item) => {
       handleCardClick: () => {
         popupPicture.open(item);
       },
-      handleLikeClick: () => {
-        card.handleLikeCard();
-      },
+      handleLikeClick: () => { 
+        card.handleLikeCard(); 
+      },  
       handleDeleteConfirm: () => {
         popupDeleteConfirm.setSubmitAction(() => {
           popupDeleteConfirm.renderLoadingDelete(true);
@@ -88,7 +88,8 @@ const createCard = (item) => {
     userId,
     api
   );
-  return card;
+  const cardElement = card.generateCard();
+  return cardElement
 };
 
 // Экземпляр popup с картинкой
@@ -102,9 +103,7 @@ popupPicture.setEventListeners();
 const cardList = new Section(
   {
     renderer: (item) => {
-      const card = createCard(item);
-      const cardElement = card.generateCard();
-      cardList.addItem(cardElement);
+      cardList.addItem(createCard(item));
     },
   },
   cardsContainerSelector
@@ -145,9 +144,7 @@ const popupCardAdd = new PopupWithForm(popupAddCardSelector, (items) => {
   api
     .addUserCard(items)
     .then((item) => {
-      const card = createCard(item);
-      const cardElement = card.generateCard();
-      cardList.addItem(cardElement);
+      cardList.addItem(createCard(item));
       formValidators['popup-add-card'].resetValidation();
       popupCardAdd.close();
     })
