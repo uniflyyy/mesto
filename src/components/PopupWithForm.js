@@ -1,40 +1,45 @@
-import Popup from './Popup.js';
-export default class PopupWithForm extends Popup {
-    constructor(popupSelector, submitCallback) {
-        super(popupSelector);
-        this._callback = submitCallback;
-        this._popupForm = this._popup.querySelector('.popup__form');
-        this._popupFormInputs = this._popupForm.querySelectorAll('.popup__input');
-        this._popupButton = this._popupForm.querySelector('.popup__submit-button');
-        this._popupButtonText = this._popupButton.textContent;
-    }
+import {Popup} from './Popup.js';
 
-    _getInputValues() {
-        this._newValues = {};
-        this._popupFormInputs.forEach((inputElement) => {
-            this._newValues[inputElement.name] = inputElement.value;
-        });
-        return this._newValues;
-    }
+export class PopupWithForm extends Popup {
+  constructor(popupSelector, { submit }) {
+    super(popupSelector);
+    this._form = this._popupElement.querySelector('.form');
+    this._submit = submit;
+    this._submitButton = this._form.querySelector('.popup__save-button');
+    this._initialValueSubmitButton = this._submitButton.textContent;
+    this._submitEvtHandler = this._submitEvtHandler.bind(this);
+  }
 
-    setEventListeners() {
-        super.setEventListeners();
-        this._popupForm.addEventListener('submit', (evt) => {
-            evt.preventDefault();
-            this._callback(this._getInputValues());
-        });
+  renderLoading(isLoading, initialDownloadMessage = 'Cохранение...') {
+    if (isLoading) {
+      this._submitButton.textContent = initialDownloadMessage;
+    } else {
+      this._submitButton.textContent = this._initialValueSubmitButton;
     }
+  }
 
-    close() {
-        super.close();
-        this._popupForm.reset();
-    }
+  _submitEvtHandler(evt) {
+    evt.preventDefault();
+    this._submit(this._getInputValues());
+  }
 
-    renderLoading(isLoading) {
-        if (isLoading) {
-            this._popupButton.textContent = 'Сохранение...';
-        } else {
-            this._popupButton.textContent = this._popupButtonText;
-        }
-    }
+  _getInputValues() {
+    const inputsList = Array.from(this._form.querySelectorAll('.form__input'));
+    const data = {};
+    inputsList.forEach(input => {
+      data[input.name] = input.value;
+    })
+    return data;
+  }
+
+  setEventListeners() {
+    this._form.addEventListener('submit', this._submitEvtHandler);
+    super.setEventListeners();
+  }
+
+  close() {
+    this._form.reset();
+    this._form.removeEventListener('submit', this._submitEvtHandler);
+    super.close();
+  }
 }

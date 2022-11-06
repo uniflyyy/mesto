@@ -1,37 +1,40 @@
-export default class Popup {
-    constructor(popupSelector) {
-        this._popup = document.querySelector(popupSelector);
-        this._handleEscClose = this._handleEscClose.bind(this);
-    }
+export class Popup {
+  constructor(popupSelector) {
+    this._popupSelector = popupSelector;
+    this._popupElement = document.querySelector(this._popupSelector);
+    this._handleClickClose = this._handleClickClose.bind(this);
+    this._handleKeydownClose = this._handleKeydownClose.bind(this);
+  }
 
-    _handleEscClose(evt) {
-        if (evt.key === 'Escape') {
-            this.close();
-        }
+  _handleClickClose(evt) {
+    if (evt.target.classList.contains('popup__close-button') || evt.target.classList.contains('popup')) {
+      this.close();
     }
+  }
 
-    _handleOverlayClose(evt) {
-        if (evt.target.classList.contains('popup_opened')) {
-          this.close(evt.target);
-        }
+  _handleKeydownClose(evt) {
+    if (evt.key === 'Escape') {
+      this.close();
     }
+  }
 
-    open() {
-        this._popup.classList.add('popup_opened');
-        document.addEventListener('keydown', this._handleEscClose);
-    }
+  setEventListeners() {
+    this._popupElement.addEventListener('click', this._handleClickClose);
+    document.addEventListener('keydown', this._handleKeydownClose);
+  }
 
-    close() {
-        this._popup.classList.remove('popup_opened');
-        document.removeEventListener('keydown', this._handleEscClose);
-    };
+  _removeEventListeners() {
+    this._popupElement.removeEventListener('click', this._handleClickClose);
+    document.removeEventListener('keydown', this._handleKeydownClose);
+  }
 
-    setEventListeners() {
-        this._popup.addEventListener('mousedown', this._handleOverlayClose.bind(this));
-        this._popup
-            .querySelector('.popup__close-button')
-            .addEventListener('click', () => {
-                this.close();
-            });
-    }
+  open() {
+    this.setEventListeners();
+    this._popupElement.classList.add('popup_opened');
+  }
+
+  close() {
+    this._removeEventListeners();
+    this._popupElement.classList.remove('popup_opened');
+  }
 }

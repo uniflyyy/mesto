@@ -1,30 +1,27 @@
-import Popup from './Popup.js';
+import {Popup} from './Popup.js';
 
-export default class PopupWithConfirm extends Popup {
-  constructor(popupSelector) {
+export class PopupWithConfirm extends Popup {
+  constructor(popupSelector, { submit }) {
     super(popupSelector);
-    this._popupForm = this._popup.querySelector('.popup__form');
-    this._popupButton = this._popupForm.querySelector('.popup__submit-button');
-    this._popupButtonText = this._popupButton.textContent;
+    this._popupElement = document.querySelector(this._popupSelector);
+    this._form = this._popupElement.querySelector('.form');
+    this._submit = submit;
+    this._submitEvtHandler = this._submitEvtHandler.bind(this);
+  }
+
+  _submitEvtHandler(evt) {
+    evt.preventDefault();
+    this._submit(this._data);
+    this._form.removeEventListener('submit', this._submitEvtHandler);
   }
 
   setEventListeners() {
+    this._form.addEventListener('submit', this._submitEvtHandler);
     super.setEventListeners();
-    this._popupForm.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-      this._handleSubmitCallback();
-    });
   }
 
-  setSubmitAction(action) {
-    this._handleSubmitCallback = action;
-  }
-
-  renderLoadingDelete(isLoading) {
-    if (isLoading) {
-      this._popupButton.textContent = 'Удаление...';
-    } else {
-      this._popupButton.textContent = this._popupButtonText;
-    }
+  open(data) {
+    this._data = data;
+    super.open();
   }
 }

@@ -1,26 +1,29 @@
-export default class UserInfo {
-    constructor(userSelectors) {
-        this._userName = document.querySelector(userSelectors.name);
-        this._userDescription = document.querySelector(userSelectors.description);
-        this._userAvatar = document.querySelector(userSelectors.avatar);
-    }
+export class UserInfo {
+  constructor({ userNameSelector, userCaptionSelector, userAvatarSelector }) {
+    this._userNameSelector = userNameSelector;
+    this._userCaptionSelector = userCaptionSelector;
+    this._userAvatarSelector = userAvatarSelector;
+    this._name = document.querySelector(this._userNameSelector);
+    this._caption = document.querySelector(this._userCaptionSelector);
+    this._avatar = document.querySelector(this._userAvatarSelector)
+  }
 
-    getUserInfo() {
-        this._userInfo = {
-            name: this._userName.textContent,
-            description: this._userDescription.textContent, 
-        };
+  getUserInfo() {
+    const data = {
+      name: this._name.textContent,
+      about: this._caption.textContent
+    };
+    return data;
+  }
 
-        return this._userInfo;
-    }
+  setUserAvatar(data) {
+    this._avatar.src = data.avatar;
+  }
 
-    setUserInfo(item) {
-        this._userDescription.textContent = item.about;
-        this._userName.textContent = item.name;
-        this.setUserAvatar(item);
-    }
-
-    setUserAvatar(item) {
-        this._userAvatar.src = item.avatar;
-    }
+  setUserInfo(data) {
+    this._name.textContent = data.name;
+    this._caption.textContent = data.about;
+    this.setUserAvatar(data);
+    this._avatar.alt = `${data.name} avatar`;
+  }
 }

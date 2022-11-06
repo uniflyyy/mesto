@@ -1,22 +1,20 @@
-export default class Section {
-    constructor( { renderer } , containerSelector) {
-        this._renderer = renderer;
-        this._container = document.querySelector(containerSelector);
-    }
+export class Section {
+  constructor({ renderer }, containerSelector) {
+    this._renderer = renderer;
+    this._container = document.querySelector(containerSelector);
+  }
 
-    addItem(card) {
-        this._container.prepend(card);
-    }
+  renderCards(cardsData) {
+    cardsData.forEach(card => {
+      this._renderer(card);
+    })
+  }
 
-    clear() {
-        this._container.innerHTML = '';
+  addItem(domElement, place = 'prepend') {
+    if (place === 'append') {
+      this._container.append(domElement);
+    } else {
+      this._container.prepend(domElement);
     }
-
-    renderItems(items) {
-        this.clear();
-
-        items.forEach((item) => {
-            this._renderer(item);
-        });
-    }
+  }
 }
