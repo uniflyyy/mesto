@@ -1,45 +1,45 @@
-import {Popup} from './Popup.js';
+import Popup from './Popup.js';
 
-export class PopupWithForm extends Popup {
-  constructor(popupSelector, { submit }) {
+export default class PopupWithForm extends Popup {
+  constructor(popupSelector, handleSubmit) {
     super(popupSelector);
-    this._form = this._popupElement.querySelector('.form');
-    this._submit = submit;
-    this._submitButton = this._form.querySelector('.popup__save-button');
-    this._initialValueSubmitButton = this._submitButton.textContent;
-    this._submitEvtHandler = this._submitEvtHandler.bind(this);
-  }
-
-  renderLoading(isLoading, initialDownloadMessage = 'Cохранение...') {
-    if (isLoading) {
-      this._submitButton.textContent = initialDownloadMessage;
-    } else {
-      this._submitButton.textContent = this._initialValueSubmitButton;
-    }
-  }
-
-  _submitEvtHandler(evt) {
-    evt.preventDefault();
-    this._submit(this._getInputValues());
+    this._handleSubmit = handleSubmit;
+    this._formElement = this._popupElement.querySelector('.popup__form');
+    this._inputList = Array.from(this._formElement.querySelectorAll('.popup__input'));
+    this._submitButtonElement = this._formElement.querySelector('.popup__submit');
+    this._submitButtonText = this._submitButtonElement.textContent;
+    this._inputValues = {};
   }
 
   _getInputValues() {
-    const inputsList = Array.from(this._form.querySelectorAll('.form__input'));
-    const data = {};
-    inputsList.forEach(input => {
-      data[input.name] = input.value;
+    this._inputList.forEach((input) => {
+      this._inputValues[input.name] = input.value;
     })
-    return data;
+
+    return this._inputValues;
+  }
+
+  _handleFormSubmit(event) {
+    event.preventDefault();
+    this._handleSubmit(this._getInputValues());
   }
 
   setEventListeners() {
-    this._form.addEventListener('submit', this._submitEvtHandler);
     super.setEventListeners();
+    this._formElement.addEventListener('submit', this._handleFormSubmit.bind(this));
   }
 
   close() {
-    this._form.reset();
-    this._form.removeEventListener('submit', this._submitEvtHandler);
     super.close();
+    this._formElement.reset();
+  }
+
+  renderLoading(isLoading) {
+    if (isLoading) {
+      this._submitButtonElement.textContent = 'Сохранение...';
+    }
+    else {
+      this._submitButtonElement.textContent = this._submitButtonText;
+    }
   }
 }

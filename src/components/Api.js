@@ -1,84 +1,105 @@
-export class Api {
-  constructor(options) {
-    this._url = options.baseUrl;
-    this._headers = options.headers;
+export default class Api {
+  constructor({ url, headers}) {
+    this._url = url;
+    this._headers = headers;
   }
 
-  _handleOriginalResponse(res) {
-    if (!res.ok) {
-      return Promise.reject(`Error: ${res.status}`);
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
     }
-    return res.json();
-  }
 
-  setUserAvatar(data) {
-    return fetch(`${this._url}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: this._headers,
-      body: JSON.stringify({
-        avatar: data.avatar
-      })
-    }).then(this._handleOriginalResponse)
-  }
-
-  deleteLike(data) {
-    return fetch(`${this._url}/cards/likes/${data._id}`, {
-      method: 'DELETE',
-      headers: this._headers,
-    }).then(this._handleOriginalResponse)
-  }
-
-  setLike(data) {
-    return fetch(`${this._url}/cards/likes/${data._id}`, {
-      method: 'PUT',
-      headers: this._headers,
-    }).then(this._handleOriginalResponse)
-  }
-
-  deleteCard(data) {
-    return fetch(`${this._url}/cards/${data._id}`, {
-      method: 'DELETE',
-      headers: this._headers
-    }).then(this._handleOriginalResponse)
-  }
-
-  postCard(data) {
-    return fetch(`${this._url}/cards`, {
-      method: 'POST',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: data.name,
-        link: data.link
-      })
-    }).then(this._handleOriginalResponse)
-  }
-
-  setUserInfo(data) {
-    return fetch(`${this._url}/users/me`, {
-      method: 'PATCH',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: data.name,
-        about: data.about
-      })
-    }).then(this._handleOriginalResponse)
-  }
-
-  getInitialData() {
-    return Promise.all([this.getUserInfo(), this.getCards()]);
-  }
-
-  getCards() {
-    return fetch(`${this._url}/cards`, {
-      method: 'GET',
-      headers: this._headers
-    }).then(this._handleOriginalResponse)
+    return Promise.reject(`Ошибка 1: ${res.status}`)
   }
 
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
-      headers: this._headers
-    }).then(this._handleOriginalResponse)
+      headers: this._headers,
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
+  }
+
+  getInitialCards() {
+    return fetch(`${this._url}/cards`, {
+      method: 'GET',
+      headers: this._headers,
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
+  }
+
+  saveUserInfo(data) {
+    return fetch(`${this._url}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: `${data.name}`,
+        about: `${data.about}`
+      })
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
+  }
+
+  saveAvatar(data) {
+    return fetch(`${this._url}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: `${data.avatar}`
+      })
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
+  }
+
+  addNewCard(data) {
+    return fetch(`${this._url}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: `${data.title}`,
+        link: `${data.link}`
+      })
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
+  }
+
+  deleteCard(cardId) {
+    return fetch(`${this._url}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
+  }
+
+  setLike(cardId) {
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
+      method: 'PUT',
+      headers: this._headers,
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
+  }
+
+  removeLike(cardId) {
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
+      method: 'DELETE',
+      headers: this._headers,
+    })
+      .then((res) => {
+        return this._checkResponse(res);
+      })
   }
 }

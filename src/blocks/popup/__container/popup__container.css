@@ -1,12 +1,18 @@
 .popup__container {
-  position: fixed;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
+  background-color: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: 430px;
+  min-height: 181px;
+  margin: 0 auto;
+  padding: 34px 36px 36px;
+  position: relative;
 }
 
-@media screen and (max-height: 450px) {
+@media screen and (max-width: 600px) {
   .popup__container {
-    top: 8%;
+    width: 100%;
+    min-height: 100px;
+    padding: 25px 22px;
   }
 }

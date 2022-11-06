@@ -1,98 +1,112 @@
-export class Card {
-  constructor(data, templateSelector, settings, ownerId, { handleCardClick, handleDeleteCardClick, setLike, deleteLike }) {
-    this._data = data;
-    this._templateSelector = templateSelector;
-    this._settings = settings;
-    this._ownerId = ownerId
-    this._handleCardClick = handleCardClick;
-    this._handleDeleteCardClick = handleDeleteCardClick;
-    this._setLike = setLike;
-    this._deleteLike = deleteLike;
+export default class Card {
+  constructor(config, data, userId, openImagePopup, deleteCard, setLikeCard, removeLikeCard) {
+    this._title = data.name;
+    this._image = data.link;
+    this._likes = data.likes;
+    this._cardId = data._id;
+    this._cardOwnerId = data.owner._id;
+    this._userId = userId;
+    this._templateSelector = config.templateSelector;
+    this._cardSelector = config.cardSelector;
+    this._imageSelector = config.imageSelector;
+    this._basketButtonSelector = config.basketButtonSelector;
+    this._titleSelector = config.titleSelector;
+    this._likeButtonSelector = config.likeButtonSelector;
+    this._likeCounterSelector = config.likeCounterSelector;
+    this._activeLikeButtonClass = config.activeLikeButtonClass;
+    this._openImagePopup = openImagePopup;
+    this._handleDeleteCard = deleteCard;
+    this._handleSetLike = setLikeCard;
+    this._handleRemoveLike = removeLikeCard;
   }
 
-  _getTemplateElement() {
-    const cardElement = document
+  // Возвращает шаблон карточки
+  _getTemplate() {
+    this._cardElement = document
       .querySelector(this._templateSelector)
-      .content
-      .firstElementChild
+      .content.querySelector(this._cardSelector)
       .cloneNode(true);
-    return cardElement;
+
+    return this._cardElement;
   }
 
-  deleteCard() {
-    this._deleteElem(this._element);
-  }
-
-  _deleteElem(elem) {
-    elem.remove();
-    elem = null;
-  }
-
-  _dislike(data) {
-    this._removeLikedClass();
-    this._deleteLike(data);
-  }
-
-  _like(data) {
-    this._addLikedClass();
-    this._setLike(data);
-  }
-
-  _removeLikedClass() {
-    this._likeButton.classList.remove(this._settings.photoLikedButtonClass);
-  }
-
-  _addLikedClass() {
-    this._likeButton.classList.add(this._settings.photoLikedButtonClass);
-  }
-
-  setLikeCount(data) {
-    this._photoLikeCount.textContent = String(data.likes.length);
-  }
-
-  _checkIsOwnCard() {
-    if (this._data.owner._id !== this._ownerId) {
-      this._deleteElem(this._deleteButton);
+  // Удаляет корзину, если карточка не принадлежит пользователю
+  _deleteNotUserBasket() {
+    if (this._userId !== this._cardOwnerId) {
+      this._basketButtonElement.remove();
     }
   }
 
-  _checkLikedState() {
-    this._data.likes.forEach((likeOwner) => {
-      if (likeOwner._id === this._ownerId) {
-        this._addLikedClass();
+  // Добавляет лайк, если пользователь его поставил
+  _checkLikeStatus() {
+    this._likes.forEach((user) => {
+      if (this._userId === user._id) {
+        this._likeButtonElement.classList.add(this._activeLikeButtonClass);
       }
-    })
+    });
   }
 
+  // Меняет состояние лайка
+  updateLikes(data) {
+    this._likes = data.likes;
+    this._likeCounterElement.textContent = data.likes.length;
+    this._likeButtonElement.classList.toggle(this._activeLikeButtonClass);
+  }
+
+  // Удаляет карточку
+  deleteCard() {
+    this._view.remove();
+    this._view = null;
+  }
+
+  // Убирает или устанавливает лайк в зависимости от состояния лайка
+  _handleLikeClick() {
+    if (this._likeButtonElement.classList.contains(this._activeLikeButtonClass)) {
+      this._handleRemoveLike(this._cardId);
+    }
+    else {
+      this._handleSetLike(this._cardId);
+    }
+  }
+
+  // Открывает попап и перекидывает ID карточки в попап с подтверждением
+  _handleBasketClick() {
+    this._handleDeleteCard(this._cardId);
+  }
+
+  // Открывает попап для просмотра карточки
+  _handleImageClick() {
+    this._openImagePopup(this._title, this._image);
+  }
+
+  // Устанавливает слушатели событий
   _setEventListeners() {
-    this._photoImage.addEventListener('click', () => {
-      this._handleCardClick(this._data);
-    })
-    this._likeButton.addEventListener('click', () => {
-      if (this._likeButton.classList.contains(this._settings.photoLikedButtonClass)) {
-        this._dislike(this._data);
-      } else {
-        this._like(this._data);
-      }
-    })
-    this._deleteButton.addEventListener('click', this._handleDeleteCardClick);
+    this._likeButtonElement.addEventListener('click', this._handleLikeClick.bind(this));
+
+    this._basketButtonElement.addEventListener('click', this._handleBasketClick.bind(this));
+
+    this._imageElement.addEventListener('click', this._handleImageClick.bind(this));
   }
 
+  // Возвращает разметку заполненной карточки с установленными слушателями событий
   generateCard() {
-    this._element = this._getTemplateElement();
-    this._photoImage = this._element.querySelector(this._settings.photoImageSelector);
-    this._photoFigcaption = this._element.querySelector(this._settings.photoFigcaptionSelector);
-    this._likeButton = this._element.querySelector(this._settings.photoLikeButtonSelector);
-    this._photoLikeCount = this._element.querySelector(this._settings.photoLikeCountSelector);
-    this._deleteButton = this._element.querySelector(this._settings.photoDeleteButtonSelector);
-    this._element.setAttribute('id', `a${this._data._id}`);
-    this._photoImage.src = this._data.link;
-    this._photoImage.alt = `Фотография ${this._data.name}`;
-    this._photoFigcaption.textContent = this._data.name;
-    this.setLikeCount(this._data)
+    this._view = this._getTemplate();
+
+    this._titleElement = this._view.querySelector(this._titleSelector);
+    this._imageElement = this._view.querySelector(this._imageSelector);
+    this._likeButtonElement = this._view.querySelector(this._likeButtonSelector);
+    this._basketButtonElement = this._view.querySelector(this._basketButtonSelector);
+    this._likeCounterElement = this._view.querySelector(this._likeCounterSelector);
+
+    this._titleElement.textContent = this._title;
+    this._imageElement.setAttribute('src', this._image);
+    this._imageElement.setAttribute('alt', this._title);
+    this._likeCounterElement.textContent = this._likes.length;
+    this._deleteNotUserBasket();
+    this._checkLikeStatus();
+
     this._setEventListeners();
-    this._checkIsOwnCard();
-    this._checkLikedState();
-    return this._element;
+
+    return this._view;
   }
 }

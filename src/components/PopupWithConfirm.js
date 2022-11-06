@@ -1,27 +1,33 @@
-import {Popup} from './Popup.js';
+import Popup from './Popup.js';
 
-export class PopupWithConfirm extends Popup {
-  constructor(popupSelector, { submit }) {
+export default class PopupWithConfirm extends Popup {
+  constructor(popupSelector) {
     super(popupSelector);
-    this._popupElement = document.querySelector(this._popupSelector);
-    this._form = this._popupElement.querySelector('.form');
-    this._submit = submit;
-    this._submitEvtHandler = this._submitEvtHandler.bind(this);
+    this._formElement = this._popupElement.querySelector('.popup__form');
+    this._submitButtonElement = this._formElement.querySelector('.popup__submit');
+    this._submitButtonText = this._submitButtonElement.textContent;
   }
 
-  _submitEvtHandler(evt) {
-    evt.preventDefault();
-    this._submit(this._data);
-    this._form.removeEventListener('submit', this._submitEvtHandler);
+  setHandleSubmit(handleSubmit) {
+    this._handleSubmit = handleSubmit;
+  }
+
+  _handleFormSubmit(event) {
+    event.preventDefault();
+    this._handleSubmit();
   }
 
   setEventListeners() {
-    this._form.addEventListener('submit', this._submitEvtHandler);
     super.setEventListeners();
+    this._formElement.addEventListener('submit', this._handleFormSubmit.bind(this))
   }
 
-  open(data) {
-    this._data = data;
-    super.open();
+  renderLoading(isLoading) {
+    if (isLoading) {
+      this._submitButtonElement.textContent = 'Удаление...';
+    }
+    else {
+      this._submitButtonElement.textContent = this._submitButtonText;
+    }
   }
 }
